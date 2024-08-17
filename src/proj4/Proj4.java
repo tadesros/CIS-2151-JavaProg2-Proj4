@@ -33,8 +33,8 @@ public class Proj4 {
          //Declare a connection object
            conDB = new MusicDB();
          
-           conDB.TestDB();
-         
+     //      conDB.TestDB();
+        artistList = conDB.getArtistList();
          
       
      }//end Main
