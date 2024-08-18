@@ -39,7 +39,7 @@ public class Proj4 {
           displayAlbums();
           
           //Display Albums by Artist
-          
+          displayAlbumsByArtists();
       
      }//end Main
     
@@ -76,8 +76,7 @@ public class Proj4 {
       * 
       */
      public static void displayAlbums()
-     {
-         
+     {         
          System.out.println("Albums");
          System.out.println("-------");
          
@@ -98,6 +97,32 @@ public class Proj4 {
      }
      
      
-     
+      
+      /**
+      * 
+      */
+     public static void displayAlbumsByArtists()
+     {         
+         System.out.println("Albums by Artist");
+         System.out.println("----------------");
+         
+         //Outer Loop
+         for (int indexOut=0; indexOut < artistList.size(); indexOut++)
+         {           
+             
+               System.out.println(artistList.get(indexOut).getName());
+             
+               ArrayList<Album> albumList = new ArrayList<>();  
+             
+               albumList = artistList.get(indexOut).getAlbumList();
+
+                for (Album album : albumList)
+                {
+                   //Print the Artist
+                    System.out.println("     " + album.getAlbumName());
+                }                  
+         }         
+         System.out.println(" ");
+     }
      
 }//end class Proj4
