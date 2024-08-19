@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Class: MusicDB
@@ -18,8 +18,12 @@ import java.util.List;
 public class MusicDB {
 
     //Data Members
+    
+    //Arraylist of Artist objects
     static ArrayList<Artist> artistImport; 
-      
+    
+    /** METHODS **/
+          
     /**
      * Constructor: MusicDB
      * Initialize artistImport ArrayList
@@ -32,17 +36,21 @@ public class MusicDB {
     /**
      * Method: getArtistList
      * @return ArrayList<Artist>
+     * This method connects to the database SQLLite
+     * Pulls in the data
+     * Stores the data in appropriate format
+     * Returns the data in Artist - Album, Album, etc.  = format
      */
     public ArrayList<Artist> getArtistList()
     {
-           //Connection Objects
-             Connection connection;
+           //Connection Object        
+            Connection connection;
              
-           //Data Sring 
+           //Artist Name and Album Name Strings = Null
            String currArtistName = null;
            String currAlbumName = null;
             
-          //Create an array lists of Record Objects
+          //Create an array lists of Record Objects - to help parsing data records
             ArrayList<DbRecord> recordList = new ArrayList<DbRecord>();
             
           //GET Data and put in an ArrayList of Albums
@@ -51,13 +59,14 @@ public class MusicDB {
                   connection = getConnection();
                   Statement statement = connection.createStatement();
 
-               //Get Artists and Albums put them in alphabetical order
+               //Get Artists and Albums put them in alphabetical order 
+               //Store the album names as "Artist_Name" and "Album_Name"
                String query =  "SELECT Artists.Name as 'Artist_Name', Albums.Name as 'Album_Name'"
                                + " FROM Artists" 
                                + " INNER JOIN Albums ON Albums.ArtistID = Artists.ArtistID"
                                + " ORDER BY Artist_Name ASC, Album_Name ASC";
 
-                //Execute the SQL - Query    
+                //Execute the SQL - query and return results in ResultSet
                   ResultSet artists = statement.executeQuery(query);  
 
                 //Create album ArrayList
@@ -66,18 +75,18 @@ public class MusicDB {
                 //Loop for going thru each row of the Database Results     
                 //Let's store these in an array for now.
                while(artists.next()) {                 
-                         //GET CURRENT ROW DATA FROM THE CURRENT RECORD                               
+                         //GET DATA FROM THE CURRENT RECORD                               
                            //Get Artist Name
                              currArtistName = artists.getString("Artist_Name");                     
                            //Get Album Name
                              currAlbumName = artists.getString("Album_Name");             
-                           //Set New Album Object
+                           //Create an Albumn object 
                              Album currAlbum = new Album(currAlbumName); 
 
                            //Create a dbRecordObject
                              DbRecord currRecord = new DbRecord(currArtistName, currAlbumName);
 
-                           //Add to Array
+                           //Add to recordList the dbRecordObject
                              recordList.add(currRecord);                                                     
                 }//end while
 
@@ -87,17 +96,19 @@ public class MusicDB {
            catch(SQLException ex) {
                 System.out.println("Error accessing database: "+ ex.getMessage());
             }
-           
-           ArrayList<ArrayList<String>> dynamic2DArray = new ArrayList<>();
+                  
+           //Need a dynamic2DArray to help combine Artist records with Album records
+             ArrayList<ArrayList<String>> dynamic2DArray = new ArrayList<>();
        
-           //Record List Size
+           //Get the list size of the record
             Integer recordListSize = recordList.size();
          
-           //Set Artist Names
+           //For checking if same artist on next record need String variables. 
              String prevRecordArtistName = null;
              String currRecordArtistName = null;
             
            //Populate 2d String Array
+           //As you go thru store the results in the form = "Artist - ALbum - Album - etc."
              Integer currIndex2d = 0;
              //Populate a list of String arrays each containing Artist Name followed by albums
              for(int i = 0; i < recordList.size(); i++) {
@@ -105,7 +116,7 @@ public class MusicDB {
                  //SET CURRENT ARTIST NAME
                  currRecordArtistName = recordList.get(i).getArtistName();
                  
-                 
+                 //If this is the first record in the list
                  if(i == 0)
                  {
                    dynamic2DArray.add(new ArrayList<>()); // Add a row  
@@ -116,13 +127,15 @@ public class MusicDB {
                 
                 
                  }
-                 //SAME ARTIST 
+                 //Current record has the same artist as previous. 
+                 //Same the album name under previous artist.
                  else if (prevRecordArtistName.equals(currRecordArtistName)){
                      
                      dynamic2DArray.get(currIndex2d).add(recordList.get(i).getAlbumName());
                      prevRecordArtistName = currRecordArtistName;                     
                  } 
-                 //DIFFERENT ARTIST
+                 //Current artist and previous artist are not equal
+                 //Create a new entry 
                  else{
                     
                      //Increase index of 2d array
@@ -138,17 +151,13 @@ public class MusicDB {
                  }                               
              }
        
-           //PRINT THE 2D ARRAY
-    //         System.out.println("Integer List of lists - "+dynamic2DArray);
-            
+  
            //PUT THE RECORDTS INTO artistImport Object
              for (int indexOut = 0; indexOut < dynamic2DArray.size(); indexOut++)
              {
                 //Get store the artist name
-                 String artistName = dynamic2DArray.get(indexOut).get(0);
-                 
-    //             System.out.println(artistName);
-                 
+                 String artistName = dynamic2DArray.get(indexOut).get(0);                 
+           
                 //For Every Record create Album and Arist objects
                   ArrayList<Album> currAlbumList = new ArrayList<>();  
                     
@@ -158,9 +167,7 @@ public class MusicDB {
                     //Create Album
                     Album currAlbum = new Album(dynamic2DArray.get(indexOut).get(indexRecord));
                     
-                    currAlbumList.add(currAlbum);
-                                       
-                    
+                    currAlbumList.add(currAlbum);                   
                 }
     
                //  System.out.println("Elements of ArrayList are:"+currAlbumList);
@@ -172,14 +179,12 @@ public class MusicDB {
                 
              }
 
-              
-        
-        return artistImport;
-    }
+            return artistImport;
+    } 
      
     /**
      * Method: Connection
-     * @return
+     * @return a connection object
      * @throws SQLException 
      */
     private static Connection getConnection() throws SQLException {

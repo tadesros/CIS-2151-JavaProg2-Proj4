@@ -1,39 +1,41 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package proj4;
 
 /**
  * Class: Album
  * @author tomad
+ * This class holds an Album Name 
  */
 public class Album {
     
     //Member Data
     private String AlbumName;
+    
+    
+    //** METHODS **
 
     /**
      * Constructor
-     * @param AlbumName 
+     * @param String AlbumName : Holds the name of the Album 
      */
     public Album(String AlbumName) {
         this.AlbumName = AlbumName;
     }
 
     /**
-     * Getter: getAlbumName
-     * @return 
+     * Method: getAlbumName
+     * @return Return the Album Name - String 
      */
     public String getAlbumName() {
         return AlbumName;
     }
+    
     /**
      * Setter: AlbumName
-     * @param AlbumName 
+     * @param AlbumName - String AlbumName
+     * Set the Album name 
      */
     public void setAlbumName(String AlbumName) {
         this.AlbumName = AlbumName;
     }   
     
-}//end Album blass
+}//end Album class

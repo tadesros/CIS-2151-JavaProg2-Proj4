@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package proj4;
 
 import java.util.ArrayList;
@@ -9,43 +5,48 @@ import java.util.ArrayList;
 /**
  * Class: Proj4
  * @author tomad
+ * The purpose of this class is to test the functionality of the other
+ * classes. 
  */
 public class Proj4 {
     
     //Data Members
     static ArrayList<Artist> artistList; 
     
+    /**  METHODS **/
     
      /**
      * Method: Main
      * @param args the command line arguments
      */
-     public static void main(String[] args) {                             
+     public static void main(String[] args) {  
+         
           //Declare an Artist ArrayList 
           artistList = new ArrayList<>(); 
           
           //Create and declare a MusicDB object
           MusicDB musicDB = new MusicDB();
           
-          //Populate the artistList using getArtistList method
+          //Populate the artistList from the SQLlist database using getArtistList method
           artistList = musicDB.getArtistList();
          
+          //Display the Main Menu
           displayIntro();
           
           //Display Artists
           displayArtists();
           
-          //Display Albums
+          //Display the Albums
           displayAlbums();
           
-          //Display Albums by Artist
+          //Display the Albums by Artist
           displayAlbumsByArtists();
       
      }//end Main
-    
-     
-     /**]
-      * 
+         
+     /**
+      * Method: displayIntro()
+      * Display the Main menu
       */   
      public static void displayIntro()
      {
@@ -54,7 +55,8 @@ public class Proj4 {
      }
      
      /**
-      * 
+      * Method: displayArtists
+      * Display a list of Artists in Alphabetical order from the Database
       */
      public static void displayArtists()
      {
@@ -69,11 +71,11 @@ public class Proj4 {
          }
          
          System.out.println(" ");
-     }
+     }     
      
-     
-      /**
-      * 
+     /**
+      * Method: displayAlbums
+      * Display a list of Albums in alphabetical order from the Database
       */
      public static void displayAlbums()
      {         
@@ -95,11 +97,11 @@ public class Proj4 {
          }         
          System.out.println(" ");
      }
-     
-     
+         
       
-      /**
-      * 
+     /**
+      * Method: displayAlbumByArtists
+      * Display Artists followed by their associated Albums
       */
      public static void displayAlbumsByArtists()
      {         
